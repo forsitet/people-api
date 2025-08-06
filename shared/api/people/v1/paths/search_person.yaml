@@ -10,6 +10,7 @@ get:
         required: false
         schema:
           type: integer
+          minimum: 1
       - name: surname
         in: query
         description: Фамилия человека
@@ -54,6 +55,7 @@ patch:
       required: true
       schema:
         type: integer
+        minimum: 1
   requestBody:
     required: true
     content:

@@ -4,12 +4,47 @@ import (
 	"context"
 	"database/sql"
 	"errors"
+	"strings"
 
 	"people/internal/model"
 	peopleV1 "people/shared/pkg/openapi/people/v1"
 )
 
 func (h *peopleHandler) UpdatePerson(ctx context.Context, req *peopleV1.UpdatePerson, params peopleV1.UpdatePersonParams) (peopleV1.UpdatePersonRes, error) {
+	if params.ID <= 0 {
+		return &peopleV1.BadRequest{
+			Code:    400,
+			Message: "Invalid person ID",
+		}, nil
+	}
+
+	if req.Name.IsSet() {
+		if name, ok := req.Name.Get(); ok && strings.TrimSpace(name) == "" {
+			return &peopleV1.BadRequest{
+				Code:    400,
+				Message: "Name cannot be empty",
+			}, nil
+		}
+	}
+
+	if req.Surname.IsSet() {
+		if surname, ok := req.Surname.Get(); ok && strings.TrimSpace(surname) == "" {
+			return &peopleV1.BadRequest{
+				Code:    400,
+				Message: "Surname cannot be empty",
+			}, nil
+		}
+	}
+
+	if req.Age.IsSet() {
+		if age, ok := req.Age.Get(); ok && (age < 0 || age > 190) {
+			return &peopleV1.BadRequest{
+				Code:    400,
+				Message: "Age must be between 0 and 190",
+			}, nil
+		}
+	}
+
 	existingPerson, err := h.Service.SearchByID(params.ID)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {

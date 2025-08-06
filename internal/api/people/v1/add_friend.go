@@ -9,11 +9,25 @@ import (
 )
 
 func (h *peopleHandler) AddFriend(ctx context.Context, req *peopleV1.AddFriendReq, params peopleV1.AddFriendParams) (peopleV1.AddFriendRes, error) {
+	if params.ID <= 0 {
+		return &peopleV1.BadRequest{
+			Code:    400,
+			Message: "Invalid person ID",
+		}, nil
+	}
+
 	friendID, ok := req.FriendID.Get()
 	if !ok {
 		return &peopleV1.BadRequest{
 			Code:    400,
 			Message: "friend_id is required",
+		}, nil
+	}
+
+	if friendID <= 0 {
+		return &peopleV1.BadRequest{
+			Code:    400,
+			Message: "Invalid friend ID",
 		}, nil
 	}
 

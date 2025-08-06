@@ -12,6 +12,7 @@ properties:
   id:
     type: integer
     description: ID человека
+    minimum: 1
     example: 1
   name:
     type: string
@@ -36,6 +37,8 @@ properties:
   age:
     type: integer
     description: Возраст человека
+    minimum: 0
+    maximum: 190
     example: 30
   emails:
     type: array

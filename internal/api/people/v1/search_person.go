@@ -29,6 +29,13 @@ func (h *peopleHandler) SearchPerson(ctx context.Context, params peopleV1.Search
 
 	var openAPIPerson peopleV1.Person
 	if id, ok := params.ID.Get(); ok {
+		if id <= 0 {
+			return &peopleV1.BadRequest{
+				Code:    400,
+				Message: "Invalid person ID",
+			}, nil
+		}
+
 		person, err := h.Service.SearchByID(id)
 		if err != nil {
 			if errors.Is(err, sql.ErrNoRows) {

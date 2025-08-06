@@ -14,6 +14,7 @@ post:
           properties:
             friend_id:
               type: integer
+              minimum: 1
   responses:
     '200':
       description: Друг добавлен

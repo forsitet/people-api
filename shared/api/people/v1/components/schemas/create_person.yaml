@@ -5,4 +5,5 @@ properties:
   id:
     type: integer
     description: ID человека
+    minimum: 1
     example: 1

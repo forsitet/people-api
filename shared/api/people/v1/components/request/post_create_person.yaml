@@ -30,6 +30,8 @@ properties:
   age:
     type: integer
     description: Возраст человека (если не указан, будет получен автоматически)
+    minimum: 0
+    maximum: 190
     example: 30
   emails:
     type: array
