@@ -1,0 +1,83 @@
+get:
+  summary: Поиск человека по ID или фамилии (одно из)
+  operationId: SearchPerson
+  tags:
+    - People
+  parameters:
+      - name: id
+        in: query
+        description: ID человека
+        required: false
+        schema:
+          type: integer
+      - name: surname
+        in: query
+        description: Фамилия человека
+        required: false
+        schema:
+          type: string
+  responses:
+    '200':
+      description: Информация о человеке
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/person.yaml
+    '400':
+      description: Параметры запроса некорректны
+      content:
+        application/json:
+          schema:
+            $ref: ../components/errors/bad_request.yaml
+    '404':
+      description: Человек с таким параметром не найден
+      content:
+        application/json:
+          schema:
+            $ref: ../components/errors/not_found.yaml
+    '500':
+      description: Ошибка сервера
+      content:
+        application/json:
+          schema:
+            $ref: '../components/errors/internal_server.yaml'
+
+patch:
+  summary: Изменить информацию о человеке
+  operationId: updatePerson
+  tags:
+    - People
+  parameters:
+    - name: id
+      in: query
+      description: ID человека для обновления
+      required: true
+      schema:
+        type: integer
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: ../components/request/update_person.yaml
+  responses:
+    '200':
+      description: Информация о человеке успешно обновлена
+    '400':
+      description: Параметры запроса некорректны
+      content:
+        application/json:
+          schema:
+            $ref: ../components/errors/bad_request.yaml
+    '404':
+      description: Люди с таким id не найдены
+      content:
+        application/json:
+          schema:
+            $ref: ../components/errors/not_found.yaml
+    '500':
+      description: Ошибка сервера
+      content:
+        application/json:
+          schema:
+            $ref: '../components/errors/internal_server.yaml'

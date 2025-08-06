@@ -1,0 +1,69 @@
+parameters:
+  - $ref: ../params/id.yaml
+post:
+  summary: Добавить друга человеку
+  operationId: addFriend
+  tags:
+    - People
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            friend_id:
+              type: integer
+  responses:
+    '200':
+      description: Друг добавлен
+    '400':
+      description: Параметры запроса некорректны
+      content:
+        application/json:
+          schema:
+            $ref: ../components/errors/bad_request.yaml
+    '404':
+      description: Люди с таким id не найдены
+      content:
+        application/json:
+          schema:
+            $ref: ../components/errors/not_found.yaml
+    '500':
+      description: Ошибка сервера
+      content:
+        application/json:
+          schema:
+            $ref: '../components/errors/internal_server.yaml'
+get:
+  summary: Получить список друзей человека
+  operationId: getFriends
+  tags:
+    - People
+  responses:
+    '200':
+      description: Список друзей
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: ../components/schemas/person.yaml
+    '400':
+      description: Параметры запроса некорректны
+      content:
+        application/json:
+          schema:
+            $ref: ../components/errors/bad_request.yaml
+    '404':
+      description: Люди с таким id не найдены
+      content:
+        application/json:
+          schema:
+            $ref: ../components/errors/not_found.yaml
+    '500':
+      description: Ошибка сервера
+      content:
+        application/json:
+          schema:
+            $ref: '../components/errors/internal_server.yaml'

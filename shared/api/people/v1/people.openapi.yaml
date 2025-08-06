@@ -1,0 +1,22 @@
+openapi: 3.0.1
+info:
+  title: PeopleService API
+  version: 1.0.0
+x-ogen:
+  target: ./shared/pkg/openapi/people/v1
+  package: people_v1
+  clean: true
+tags:
+  - name: People
+    description: Предоставление информации о человеке 
+paths:
+  /api/v1/people:
+      $ref: ./paths/list_people.yaml 
+  /api/v1/create:
+      $ref: ./paths/create_person.yaml
+  /api/v1/people/search:
+      $ref: ./paths/search_person.yaml
+  /api/v1/people/{id}/emails:
+      $ref: ./paths/person_id_emails.yaml
+  /api/v1/people/{id}/friends:
+      $ref: ./paths/person_id_friends.yaml

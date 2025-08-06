@@ -1,0 +1,26 @@
+get:
+  summary: Получить список всех людей
+  operationId: listPeople
+  tags:
+    - People
+  responses:
+    '200':
+      description: Список людей
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: ../components/schemas/person.yaml
+    '400':
+      description: Параметры запроса некорректны
+      content:
+        application/json:
+          schema:
+            $ref: ../components/errors/bad_request.yaml
+    '500':
+      description: Ошибка сервера
+      content:
+        application/json:
+          schema:
+            $ref: '../components/errors/internal_server.yaml'

@@ -1,0 +1,471 @@
+openapi: 3.0.1
+info:
+  title: PeopleService API
+  version: 1.0.0
+tags:
+  - name: People
+    description: Предоставление информации о человеке
+paths:
+  /api/v1/people:
+    get:
+      summary: Получить список всех людей
+      operationId: listPeople
+      tags:
+        - People
+      responses:
+        '200':
+          description: Список людей
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/person'
+        '400':
+          description: Параметры запроса некорректны
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/bad_request'
+        '500':
+          description: Ошибка сервера
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/internal_server'
+  /api/v1/create:
+    post:
+      summary: Создать нового человека
+      operationId: createPerson
+      tags:
+        - People
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/post_create_person'
+      responses:
+        '201':
+          description: Человек создан
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/create_person'
+        '400':
+          description: Ошибка валидации данных
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/bad_request'
+        '500':
+          description: Ошибка сервера
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/internal_server'
+  /api/v1/people/search:
+    get:
+      summary: Поиск человека по ID или фамилии (одно из)
+      operationId: SearchPerson
+      tags:
+        - People
+      parameters:
+        - name: id
+          in: query
+          description: ID человека
+          required: false
+          schema:
+            type: integer
+        - name: surname
+          in: query
+          description: Фамилия человека
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Информация о человеке
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/person'
+        '400':
+          description: Параметры запроса некорректны
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/bad_request'
+        '404':
+          description: Человек с таким параметром не найден
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/not_found'
+        '500':
+          description: Ошибка сервера
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/internal_server'
+    patch:
+      summary: Изменить информацию о человеке
+      operationId: updatePerson
+      tags:
+        - People
+      parameters:
+        - name: id
+          in: query
+          description: ID человека для обновления
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/update_person'
+      responses:
+        '200':
+          description: Информация о человеке успешно обновлена
+        '400':
+          description: Параметры запроса некорректны
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/bad_request'
+        '404':
+          description: Люди с таким id не найдены
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/not_found'
+        '500':
+          description: Ошибка сервера
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/internal_server'
+  /api/v1/people/{id}/emails:
+    parameters:
+      - $ref: '#/components/parameters/id'
+    post:
+      summary: Добавить email человеку
+      operationId: addEmail
+      tags:
+        - People
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/email'
+      responses:
+        '200':
+          description: Email добавлен
+        '300':
+          description: Email уже существует
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/already_exists'
+        '404':
+          description: Человек не найден
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/not_found'
+        '500':
+          description: Ошибка сервера
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/internal_server'
+  /api/v1/people/{id}/friends:
+    parameters:
+      - $ref: '#/components/parameters/id'
+    post:
+      summary: Добавить друга человеку
+      operationId: addFriend
+      tags:
+        - People
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                friend_id:
+                  type: integer
+      responses:
+        '200':
+          description: Друг добавлен
+        '400':
+          description: Параметры запроса некорректны
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/bad_request'
+        '404':
+          description: Люди с таким id не найдены
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/not_found'
+        '500':
+          description: Ошибка сервера
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/internal_server'
+    get:
+      summary: Получить список друзей человека
+      operationId: getFriends
+      tags:
+        - People
+      responses:
+        '200':
+          description: Список друзей
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/person'
+        '400':
+          description: Параметры запроса некорректны
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/bad_request'
+        '404':
+          description: Люди с таким id не найдены
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/not_found'
+        '500':
+          description: Ошибка сервера
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/internal_server'
+components:
+  schemas:
+    person:
+      type: object
+      required:
+        - id
+        - name
+        - surname
+        - patronymic
+        - gender
+        - nationality
+        - age
+        - emails
+      properties:
+        id:
+          type: integer
+          description: ID человека
+          example: 1
+        name:
+          type: string
+          description: Имя человека
+          example: Иван
+        surname:
+          type: string
+          description: Фамилия человека
+          example: Иванов
+        patronymic:
+          type: string
+          description: Отчество человека
+          example: Иванович
+        gender:
+          type: string
+          description: Пол человека
+          example: Мужской
+        nationality:
+          type: string
+          description: Национальность человека
+          example: Русский
+        age:
+          type: integer
+          description: Возраст человека
+          example: 30
+        emails:
+          type: array
+          items:
+            type: string
+          description: Список email адресов человека
+          example:
+            - denis@mail.ru
+            - ivan@yandex.ru
+    bad_request:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+          description: HTTP-код ошибки
+          example: 400
+        message:
+          type: string
+          description: Описание ошибки
+          example: 'Bad Request: Invalid input data'
+    internal_server:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+          description: HTTP-код ошибки
+          example: 500
+        message:
+          type: string
+          description: Описание ошибки
+          example: 'Internal Server Error: An unexpected error occurred'
+    post_create_person:
+      type: object
+      required:
+        - name
+        - surname
+        - patronymic
+        - emails
+      properties:
+        name:
+          type: string
+          description: Имя человека
+          example: Иван
+        surname:
+          type: string
+          description: Фамилия человека
+          example: Иванов
+        patronymic:
+          type: string
+          description: Отчество человека
+          example: Иванович
+        gender:
+          type: string
+          description: Пол человека (если не указан, будет получен автоматически)
+          enum:
+            - Мужской
+            - Женский
+        nationality:
+          type: string
+          description: Национальность человека (если не указана, будет получена автоматически)
+          example: Русский
+        age:
+          type: integer
+          description: Возраст человека (если не указан, будет получен автоматически)
+          example: 30
+        emails:
+          type: array
+          items:
+            type: string
+          description: Список email адресов человека
+          example:
+            - denis@mail.ru
+            - ivan@yandex.ru
+    create_person:
+      type: object
+      required:
+        - id
+      properties:
+        id:
+          type: integer
+          description: ID человека
+          example: 1
+    not_found:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+          description: HTTP-код ошибки
+          example: 404
+        message:
+          type: string
+          description: Описание ошибки
+          example: Person not found
+    update_person:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Имя человека
+          example: Иван
+        surname:
+          type: string
+          description: Фамилия человека
+          example: Иванов
+        patronymic:
+          type: string
+          description: Отчество человека
+          example: Иванович
+        gender:
+          type: string
+          description: Пол человека
+          enum:
+            - Мужской
+            - Женский
+        nationality:
+          type: string
+          description: Национальность человека
+          example: Русский
+        age:
+          type: integer
+          description: Возраст человека
+          example: 30
+        emails:
+          type: array
+          items:
+            type: string
+          description: Список email адресов человека
+          example:
+            - denis@mail.ru
+            - ivan@yandex.ru
+    email:
+      type: object
+      required:
+        - email
+      properties:
+        email:
+          type: string
+          description: email человека
+          example: denis@mail.ru
+    already_exists:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+          description: HTTP-код ошибки
+          example: 300
+        message:
+          type: string
+          description: Описание ошибки
+          example: Такой email уже существует
+  parameters:
+    id:
+      name: id
+      in: path
+      required: true
+      description: id человека
+      schema:
+        type: integer
+        minimum: 1
+        example: 1
+x-ogen:
+  target: ./shared/pkg/openapi/people/v1
+  package: people_v1
+  clean: true

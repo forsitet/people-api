@@ -1,0 +1,49 @@
+type: object
+required:
+  - id
+  - name
+  - surname
+  - patronymic
+  - gender
+  - nationality
+  - age
+  - emails
+properties:
+  id:
+    type: integer
+    description: ID человека
+    example: 1
+  name:
+    type: string
+    description: Имя человека
+    example: "Иван"
+  surname:
+    type: string
+    description: Фамилия человека
+    example: "Иванов"
+  patronymic:
+    type: string
+    description: Отчество человека
+    example: "Иванович"
+  gender:
+    type: string
+    description: Пол человека
+    example: "Мужской"
+  nationality:
+    type: string
+    description: Национальность человека
+    example: "Русский"
+  age:
+    type: integer
+    description: Возраст человека
+    example: 30
+  emails:
+    type: array
+    items:
+      type: string
+    description: Список email адресов человека
+    example: [
+      "denis@mail.ru",
+      "ivan@yandex.ru"
+    ]
+   

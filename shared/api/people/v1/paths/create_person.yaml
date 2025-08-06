@@ -1,0 +1,30 @@
+post:
+  summary: Создать нового человека
+  operationId: createPerson
+  tags:
+    - People
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: ../components/request/post_create_person.yaml
+  responses:
+    '201':
+      description: Человек создан
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/create_person.yaml
+    '400':
+      description: Ошибка валидации данных
+      content:
+        application/json:
+          schema:
+            $ref: ../components/errors/bad_request.yaml
+    '500':
+      description: Ошибка сервера
+      content:
+        application/json:
+          schema:
+            $ref: '../components/errors/internal_server.yaml'
